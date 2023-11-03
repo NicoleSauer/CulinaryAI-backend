@@ -1,0 +1,5 @@
+datasets
+transformers
+tqdm
+python-dotenv
+accelerate

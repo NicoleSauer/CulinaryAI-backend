@@ -161,3 +161,6 @@ cython_debug/
 
 # node modules folder from node server
 server/node_modules/
+
+# macOS
+.DS_Store

@@ -1,5 +1,5 @@
-from transformers import AutoTokenizer
-from transformers import AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM
+import torch
 
 
 # Run the model
@@ -7,6 +7,12 @@ if __name__ == "__main__":
 
     # Model input text
     input_text = "A tasty recipe for chocolate chip cookies: "
+
+    # Use GPU if available
+    if torch.cuda.is_available():
+        torch.set_default_device("cuda")
+    else:
+        torch.set_default_device("cpu")
 
     # Use local model (if available)
     # model = AutoModelForCausalLM.from_pretrained("./phi-1_5", trust_remote_code=True)

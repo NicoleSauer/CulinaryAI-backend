@@ -7,13 +7,13 @@ After cloning the repository, run the following commands to create a virtual env
 MacOS/Linux:
 
 ```
-python3 -m venv venv
+python3 -m venv .venv
 ```
 
 Windows:
 
 ```
-python -m venv venv
+python -m venv .venv
 ```
 
 </br>
@@ -65,6 +65,12 @@ Windows with CUDA-GPU:
 
 ```
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
+
+Windows without CUDA-GPU:
+
+```
+pip install torch torchvision torchaudio
 ```
 
 If you use a Mac, you can´t use CUDA, so just run the following command:

@@ -11,7 +11,15 @@ import os
 INPUT_FILE_PATH = 'data/data_transformation/training_data.json'
 # MODEL_PATH = 'microsoft/phi-1_5'
 # MODEL_PATH = 'gpt2-large'
-MODEL_PATH = 'gpt2'
+BASE_MODEL_PATH = 'gpt2'
+
+LOCAL_MODEL_PATH = './trained_model_' + BASE_MODEL_PATH.replace('/', '_')
+MODEL_PATH = LOCAL_MODEL_PATH if os.path.exists(
+    LOCAL_MODEL_PATH) else BASE_MODEL_PATH
+
+
+INGREDIENT_SEPARATOR = '$'
+PROMPT_ANSWER_SEPARATOR = '%'
 
 CLUSTER_FLAG = False
 
@@ -21,13 +29,20 @@ access_token = os.environ["HF_TOKEN"]
 
 
 # Load dataset from file
-def load_data_generator_with_separator(recipe_list, separator='\t\t'):
+def load_data_generator_with_separator(recipe_list, separator=PROMPT_ANSWER_SEPARATOR):
     for recipe in recipe_list:
         for entry in recipe['training_data']:
-            prompt = entry['prompt']
+            ingredient_string = ""
+            for ingredient in entry['available_ingredients']:
+                # Only add ingredient separator if not last ingredient
+                if ingredient != entry['available_ingredients'][-1]:
+                    ingredient_string += ingredient + \
+                        INGREDIENT_SEPARATOR
+                else:
+                    ingredient_string += ingredient
             answer = entry['answer']
             # yield creates a Generator which means that the data is not loaded into memory all at once
-            yield {"data": f"{prompt}{separator}{answer}"}
+            yield {"data": f"{ingredient_string}{separator}{answer}"}
 
 
 def tokenize_entry(examples, tokenizer):
@@ -51,7 +66,7 @@ if __name__ == "__main__":
         test_size=0.2, shuffle=True, seed=42)
 
     tokenizer = AutoTokenizer.from_pretrained(
-        MODEL_PATH, token=access_token)
+        BASE_MODEL_PATH, token=access_token)
 
     tokenizer.pad_token = tokenizer.eos_token
 
@@ -66,18 +81,19 @@ if __name__ == "__main__":
     data_collator = DataCollatorForLanguageModeling(
         tokenizer=tokenizer, mlm=False)
 
+    print('Loading model...')
     if CLUSTER_FLAG:
         # Comment out torch_dtype=torch.float16 for cluster training
-        print('Loading model...')
         model = AutoModelForCausalLM.from_pretrained(
-            MODEL_PATH, token=access_token, trust_remote_code=True,
+            BASE_MODEL_PATH, token=access_token, trust_remote_code=True,
+            # Set this to False to be able to download the model on the first run, set it to True afterwards
             local_files_only=True,
             torch_dtype=torch.float16
         )
     else:
-        print('Loading model...')
         model = AutoModelForCausalLM.from_pretrained(
-            MODEL_PATH, token=access_token, trust_remote_code=True,
+            BASE_MODEL_PATH, token=access_token, trust_remote_code=True,
+            # Set this to False to be able to download the model on the first run, set it to True afterwards
             local_files_only=True,
             # torch_dtype=torch.float16
         )
@@ -87,7 +103,7 @@ if __name__ == "__main__":
     if CLUSTER_FLAG:
         # Play around with train_epochs, train_batch_size, eval_batch_size and maybe deactivate optimizer
         training_arguments = TrainingArguments(
-            output_dir='./trained_model' + MODEL_PATH.replace('/', '_'),
+            output_dir=LOCAL_MODEL_PATH,
             overwrite_output_dir=True,
             num_train_epochs=4,
             per_device_train_batch_size=1,
@@ -100,15 +116,16 @@ if __name__ == "__main__":
         )
     else:
         training_arguments = TrainingArguments(
-            output_dir='./trained_model' + MODEL_PATH.replace('/', '_'),
+            output_dir=LOCAL_MODEL_PATH,
             overwrite_output_dir=True,
             num_train_epochs=4,
             per_device_train_batch_size=1,
             per_device_eval_batch_size=1,
             weight_decay=0.01,
-            save_strategy='epoch',
-            # save_steps=500,
+            save_strategy='steps',
+            save_steps=1000,
             eval_steps=10000,
+            save_total_limit=3,
             # optim='adafactor'
         )
 
@@ -125,8 +142,9 @@ if __name__ == "__main__":
 
     print('Training model with ' +
           torch.cuda.get_device_name(current_device) + '...')
-    trainer.train()
-    trainer.save_model('./trained_model_' + MODEL_PATH.replace('/', '_'))
+
+    trainer.train(resume_from_checkpoint=True)
+    trainer.save_model(LOCAL_MODEL_PATH)
 
     eval_results = trainer.evaluate()
     print(f"Perplexity: {math.exp(eval_results['eval_loss']):.2f}")

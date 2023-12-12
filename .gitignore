@@ -166,3 +166,7 @@ server/node_modules/
 .DS_Store
 data/data_transformation/training_data.json
 data/data_transformation/skipped_recipes.json
+
+# previous model checkpoints
+/FirstTry_2023_12_12
+/trained_model_gpt2

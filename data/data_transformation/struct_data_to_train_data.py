@@ -4,7 +4,7 @@ from tqdm import tqdm
 import random
 
 # Load the original JSON data
-with open('./data/data_acquisition/recipes_corrected.json', 'r', encoding='utf-8') as file:
+with open('./data/data_acquisition/structured_recipes.json', 'r', encoding='utf-8') as file:
     recipes = json.load(file)
 
 
@@ -48,6 +48,13 @@ def comma_separate_list(list, key='name'):
     return comma_separated_list
 
 
+def generate_ingredient_list(ingredients):
+    ingredient_list = []
+    for ingredient in ingredients:
+        ingredient_list.append(ingredient['name'])
+    return ingredient_list
+
+
 def generate_full_ingredient_string(ingredients):
     # Generate a string of all ingredients
     full_ingredient_string = ''
@@ -67,7 +74,6 @@ def generate_training_data(recipe):
     ingredients = recipe['ingredients']
     prep_time = recipe['prepTime']
     portions = recipe['numberOfPortions']
-    nutritional_values = recipe['nutritionalValues']
 
     # generate a list of all different ingredient combinations
     ingredient_combinations = generate_combinations(ingredients)
@@ -81,14 +87,12 @@ def generate_training_data(recipe):
             ingredient_combinations, 100)
 
     for ingredient_combination in ingredient_combinations:
-        available_ingredients_string = comma_separate_list(
+        available_ingredients = generate_ingredient_list(
             ingredient_combination)
 
         # Finding missing ingredients not in ingredient_combination
         non_available_ingredients_string = comma_separate_list(filter_available_ingredients(
             ingredients, ingredient_combination))
-
-        prompt = available_ingredients_string
 
         if len(non_available_ingredients_string) == 0:
             answer = f'Du hast alle Zutaten für das folgende Rezept: {recipe["name"]}. '
@@ -97,10 +101,10 @@ def generate_training_data(recipe):
         answer += 'Dazu brauchst diese Zutaten: ' + \
             generate_full_ingredient_string(ingredients) + ' '
 
-        answer += f"Dieses Rezept dauert circa {prep_time} Minuten und ergibt {portions} Portionen. "
-        answer += f"Die Nährwerte pro Portion sehen wie folgt aus: {nutritional_values['kcal']} kcal, {nutritional_values['protein']} g Eiweiß, {nutritional_values['fat']} g Fett und {nutritional_values['carbohydrates']} g Kohlenhydrate."
+        answer += f"Dieses Rezept dauert circa {prep_time} Minuten und ergibt {portions} Portionen."
 
-        training_data.append({'prompt': prompt, 'answer': answer})
+        training_data.append(
+            {'available_ingredients': available_ingredients, 'answer': answer})
 
     return training_data
 

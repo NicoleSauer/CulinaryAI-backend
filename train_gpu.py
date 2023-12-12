@@ -59,7 +59,7 @@ if __name__ == "__main__":
     tokenized_dataset = dataset.map(
         tokenize_entry,
         batched=False,
-        num_proc=6,
+        num_proc=6,  # When training on cluster, set this to something else?
         remove_columns=dataset['train'].column_names,
         fn_kwargs={'tokenizer': tokenizer})
 
@@ -120,7 +120,11 @@ if __name__ == "__main__":
         data_collator=data_collator
     )
 
-    print('Training model...')
+    # Check which device is used for training
+    current_device = torch.cuda.current_device()
+
+    print('Training model with ' +
+          torch.cuda.get_device_name(current_device) + '...')
     trainer.train()
     trainer.save_model('./trained_model_' + MODEL_PATH.replace('/', '_'))
 

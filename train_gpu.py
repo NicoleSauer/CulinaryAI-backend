@@ -20,6 +20,7 @@ MODEL_PATH = LOCAL_MODEL_PATH if os.path.exists(
 
 INGREDIENT_SEPARATOR = '$'
 PROMPT_ANSWER_SEPARATOR = '%'
+ANSWER_ENDING = '&'
 
 CLUSTER_FLAG = False
 
@@ -42,7 +43,7 @@ def load_data_generator_with_separator(recipe_list, separator=PROMPT_ANSWER_SEPA
                     ingredient_string += ingredient
             answer = entry['answer']
             # yield creates a Generator which means that the data is not loaded into memory all at once
-            yield {"data": f"{ingredient_string}{separator}{answer}"}
+            yield {"data": f"{ingredient_string}{separator}{answer}{ANSWER_ENDING}"}
 
 
 def tokenize_entry(examples, tokenizer):
@@ -111,8 +112,9 @@ if __name__ == "__main__":
             per_device_eval_batch_size=1,
             weight_decay=0.01,
             save_strategy='epoch',
-            # save_steps=500,
+            # save_steps=1000,
             eval_steps=10000,
+            save_total_limit=3,
             # optim='adafactor'
         )
     else:
@@ -144,7 +146,7 @@ if __name__ == "__main__":
     print('Training model with ' +
           torch.cuda.get_device_name(current_device) + '...')
 
-    trainer.train(resume_from_checkpoint=True)
+    trainer.train()  # resume_from_checkpoint=True
     trainer.save_model(LOCAL_MODEL_PATH)
 
     eval_results = trainer.evaluate()

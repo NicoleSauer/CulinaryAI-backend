@@ -65,6 +65,8 @@ def generate_full_ingredient_string(ingredients):
             full_ingredient_string += f"{ingredient['unit']} "
         if ingredient['name'] is not None:
             full_ingredient_string += f"{ingredient['name']}, "
+    # Remove last comma
+    full_ingredient_string = full_ingredient_string[:-2]
     return full_ingredient_string
 
 
@@ -99,7 +101,9 @@ def generate_training_data(recipe):
         else:
             answer = f'Wenn du noch {non_available_ingredients_string} besorgst, kannst du das folgende Rezept nachkochen: {recipe["name"]}. '
         answer += 'Dazu brauchst diese Zutaten: ' + \
-            generate_full_ingredient_string(ingredients) + ' '
+            generate_full_ingredient_string(ingredients) + '. '
+
+        answer += f"Und so wird's gemacht: {recipe['instructions']} "
 
         answer += f"Dieses Rezept dauert circa {prep_time} Minuten und ergibt {portions} Portionen."
 

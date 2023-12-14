@@ -10,7 +10,7 @@ BASE_MODEL_PATH = 'gpt2'
 # Run the model
 if __name__ == "__main__":
 
-    ingredient_list = ['Paprika', 'Reis']
+    ingredient_list = ['Schrauben', 'Klopapier']
 
     # Model input text
     input_text = ""
@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     # Use local model (if available)
     model = AutoModelForCausalLM.from_pretrained(
-        "trained_model_gpt2/checkpoint-2000", trust_remote_code=True)
+        "trained_model_gpt2/checkpoint-145000", trust_remote_code=True)
 
     # Use stock model from HuggingFace
     # model = AutoModelForCausalLM.from_pretrained(
@@ -53,6 +53,12 @@ if __name__ == "__main__":
     )
     # output = tokenizer.batch_decode(outputs, skip_special_tokens=True)
     output = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+    # cut off at "Portionen"
+    output = output.split('Portionen')[0] + 'Portionen.'
+
+    # TODO: cut off after '&' symbol for newest version of model
+    # output = output.split('&')[0]
 
     # Print output
     print(output)

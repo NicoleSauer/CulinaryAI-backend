@@ -168,5 +168,7 @@ data/data_transformation/training_data.json
 data/data_transformation/skipped_recipes.json
 
 # previous model checkpoints
-/FirstTry_2023_12_12
+/FirstTry_2023_12_12_with_Nutrition
 /trained_model_gpt2
+/SecondTry_2023_12_13_forgot_instructions
+/ThirdTry_2023_12_14

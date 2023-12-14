@@ -83,11 +83,12 @@ if __name__ == "__main__":
 
     print('Loading model...')
     if CLUSTER_FLAG:
-        # Comment out torch_dtype=torch.float16 for cluster training
+        # Comment out torch_dtype=torch.float16 for cluster training or set it to auto
         model = AutoModelForCausalLM.from_pretrained(
             BASE_MODEL_PATH, token=access_token, trust_remote_code=True,
             # Set this to False to be able to download the model on the first run, set it to True afterwards
             local_files_only=True,
+            # torch_dtype represents the data type of a PyTorch tensor -> bigger = high precision but higher memory usage, smaller = lower precision but also lower memory usage
             torch_dtype=torch.float16
         )
     else:

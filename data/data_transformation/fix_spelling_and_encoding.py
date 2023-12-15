@@ -1,7 +1,7 @@
 import json
 
 # Load the JSON data from the file
-with open('./data/data_acquisition/structured_chefkoch_recipes_TYPO.json', 'r') as file:
+with open('./data/data_acquisition/structured_recipes.json', 'r') as file:
     recipes = json.load(file)
 
 

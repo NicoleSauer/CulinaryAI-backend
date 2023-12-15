@@ -82,6 +82,7 @@ if __name__ == "__main__":
     data_collator = DataCollatorForLanguageModeling(
         tokenizer=tokenizer, mlm=False)
 
+    # TODO:  add logging
     print('Loading model...')
     if CLUSTER_FLAG:
         # Comment out torch_dtype=torch.float16 for cluster training or set it to auto

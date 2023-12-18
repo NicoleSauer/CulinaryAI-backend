@@ -4,4 +4,4 @@ tqdm
 python-dotenv
 accelerate
 wandb
-einpos
+einops

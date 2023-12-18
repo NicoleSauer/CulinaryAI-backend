@@ -85,6 +85,7 @@ if __name__ == "__main__":
     data_collator = DataCollatorForLanguageModeling(
         tokenizer=tokenizer, mlm=False)
 
+    # TODO:  add logging
     print('Loading model...')
     model = AutoModelForCausalLM.from_pretrained(
         BASE_MODEL_PATH, token=access_token, trust_remote_code=True,

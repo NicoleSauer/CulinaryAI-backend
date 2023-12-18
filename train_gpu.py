@@ -123,11 +123,9 @@ if __name__ == "__main__":
     # Initialize wandb
     print('Initializing weights and biases dashboard...')
     wandb.init(
-        # IMPORTANT: Switch this project name to something else, if you are training another model!
-        project="CulinaryPhi",
-        resume='must',
-        # IMPORTANT: Switch this id to something else, if you are training another model!
-        id='phi_run_1',
+        project='Culinary_' + BASE_MODEL_PATH,
+        resume='allow',
+        id=BASE_MODEL_PATH + '_1',
         config={
                 "learning_rate": training_arguments.learning_rate,
                 "epochs": training_arguments.num_train_epochs,
@@ -146,7 +144,14 @@ if __name__ == "__main__":
     print('Training model with ' +
           torch.cuda.get_device_name(current_device) + '...')
 
-    trainer.train()  # Add this to resume from a checkpoint: resume_from_checkpoint=True
+    # If model directory is not empty, resume training from checkpoint
+    if os.listdir(LOCAL_MODEL_PATH):
+        print('Resuming training from checkpoint...')
+        trainer.train(resume_from_checkpoint=True)
+    else:
+        print('Training model from scratch...')
+        trainer.train()
+
     trainer.save_model(LOCAL_MODEL_PATH)
 
     eval_results = trainer.evaluate()

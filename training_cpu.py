@@ -98,6 +98,7 @@ if __name__ == "__main__":
         save_steps=1000,
         eval_steps=10000,
         save_total_limit=3,
+        use_cpu=True,
         # optim='adafactor'
     )
 
@@ -106,7 +107,7 @@ if __name__ == "__main__":
         args=training_arguments,
         train_dataset=tokenized_dataset['train'],
         eval_dataset=tokenized_dataset['test'],
-        data_collator=data_collator
+        data_collator=data_collator,
     )
 
     trainer.train()  # resume_from_checkpoint=True

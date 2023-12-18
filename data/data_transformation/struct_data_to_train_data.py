@@ -4,7 +4,7 @@ from tqdm import tqdm
 import random
 
 # Load the original JSON data
-with open('./data/data_acquisition/structured_recipes.json', 'r', encoding='utf-8') as file:
+with open('./data/data_acquisition/recipes.json', 'r', encoding='utf-8') as file:
     recipes = json.load(file)
 
 
@@ -116,13 +116,17 @@ def generate_training_data(recipe):
 # Create a new JSON structure with prompts and answers for each recipe
 prompt_answer_pair = []
 skipped_recipes = []
+recipe_number = 0
 for recipe in tqdm(recipes):
+    # add an ID and increment it for every recipe
+    recipe_number += 1
     # Only consider recipes with less than 15 ingredients
     if len(recipe['ingredients']) > 15:
         skipped_recipes.append(recipe['name'])
         continue
     recipe_data = {
-        "chefkochID": recipe['chefkochID'],
+        "recipeNumber": recipe_number,
+        "chefkochId": recipe['chefkochID'],
         "training_data": generate_training_data(recipe)
     }
     prompt_answer_pair.append(recipe_data)

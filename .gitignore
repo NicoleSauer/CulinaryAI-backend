@@ -172,3 +172,4 @@ data/data_transformation/skipped_recipes.json
 /trained_model_gpt2
 /SecondTry_2023_12_13_forgot_instructions
 /ThirdTry_2023_12_14
+/wandb

@@ -2,5 +2,5 @@
   "[python]": {
     "editor.defaultFormatter": "ms-python.autopep8"
   },
-  "cSpell.words": ["dotenv", "Magerjoghurt", "nachkochen", "tqdm"]
+  "cSpell.words": ["dotenv", "Magerjoghurt", "nachkochen", "tqdm", "wandb"]
 }

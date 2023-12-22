@@ -7,8 +7,17 @@ import random
 with open('./data/data_acquisition/recipes.json', 'r', encoding='utf-8') as file:
     recipes = json.load(file)
 
+# Load csv with non-ingredients
+with open('./data/data_transformation/non_ingredients.csv', 'r', encoding='utf-8') as file:
+    non_ingredients = file.read().split(',')
+    non_ingredients = [ingredient.strip() for ingredient in non_ingredients]
 
-def generate_combinations(ingredients):
+# Load JSON with funny answers
+with open('./data/data_transformation/funny_answers.json', 'r', encoding='utf-8') as file:
+    funny_answers = json.load(file)
+
+
+def generate_combinations(ingredients) -> list:
     all_combinations = []
     # Generate combinations of all lengths from 1 to the length of ingredients list
     for r in range(1, len(ingredients) + 1):
@@ -20,7 +29,20 @@ def generate_combinations(ingredients):
     return all_combinations
 
 
-def filter_available_ingredients(ingredients, available_ingredients):
+# Generate combinations with non-ingredients with a length between 1 and 4
+def generate_combinations_with_non_ingredients(non_ingredients) -> list:
+    all_non_ingredient_combinations = []
+    # Generate combinations of all lengths from 1 to 4
+    for r in tqdm(range(1, 4)):
+        # Use combinations to generate all possible combinations of length r
+        combinations_r = combinations(non_ingredients, r)
+        # Extend the all_combinations list with the combinations generated
+        all_non_ingredient_combinations.extend(combinations_r)
+
+    return all_non_ingredient_combinations
+
+
+def filter_available_ingredients(ingredients, available_ingredients) -> list:
     # Filter out ingredients that are not in available_ingredients
     non_available_ingredients = []
     for ingredient in ingredients:
@@ -48,14 +70,14 @@ def comma_separate_list(list, key='name'):
     return comma_separated_list
 
 
-def generate_ingredient_list(ingredients):
+def generate_ingredient_list(ingredients) -> list:
     ingredient_list = []
     for ingredient in ingredients:
         ingredient_list.append(ingredient['name'])
     return ingredient_list
 
 
-def generate_full_ingredient_string(ingredients):
+def generate_full_ingredient_string(ingredients) -> str:
     # Generate a string of all ingredients
     full_ingredient_string = ''
     for ingredient in ingredients:
@@ -71,7 +93,7 @@ def generate_full_ingredient_string(ingredients):
 
 
 # Function to generate prompts and answers for each recipe
-def generate_training_data(recipe):
+def generate_training_data(recipe) -> list:
     training_data = []
     ingredients = recipe['ingredients']
     prep_time = recipe['prepTime']
@@ -80,13 +102,11 @@ def generate_training_data(recipe):
     # generate a list of all different ingredient combinations
     ingredient_combinations = generate_combinations(ingredients)
 
-    # Limit the number of ingredient combinations per recipe to 100
-    if len(ingredient_combinations) > 100:
-        # print(
-        #    f"Number of ingredient combinations for recipe {recipe['name']} is greater than 100. Randomly selecting 100 ingredient combinations.")
-        # Randomly select 100 ingredient combinations
+    # Limit the number of ingredient combinations per recipe to 10
+    if len(ingredient_combinations) > 10:
+        # Randomly select 10 ingredient combinations
         ingredient_combinations = random.sample(
-            ingredient_combinations, 100)
+            ingredient_combinations, 10)
 
     for ingredient_combination in ingredient_combinations:
         available_ingredients = generate_ingredient_list(
@@ -113,6 +133,29 @@ def generate_training_data(recipe):
     return training_data
 
 
+# Function to generate prompts and answers for non edible ingredients
+def generate_training_data_for_non_ingredients(non_ingredients, funny_answers):
+    training_data = []
+    # generate a list of all different ingredient combinations
+    non_ingredient_combinations = generate_combinations_with_non_ingredients(
+        non_ingredients)
+
+    # Limit the number of non ingredient combinations 1000
+    if len(non_ingredient_combinations) > 1000:
+        non_ingredient_combinations = random.sample(
+            non_ingredient_combinations, 1000)
+
+    for non_ingredient_combination in non_ingredient_combinations:
+        available_non_ingredients = list(non_ingredient_combination)
+
+        answer = random.choice(funny_answers)
+
+        training_data.append(
+            {'available_ingredients': available_non_ingredients, 'answer': answer})
+
+    return training_data
+
+
 # Create a new JSON structure with prompts and answers for each recipe
 prompt_answer_pair = []
 skipped_recipes = []
@@ -130,6 +173,12 @@ for recipe in tqdm(recipes):
         "training_data": generate_training_data(recipe)
     }
     prompt_answer_pair.append(recipe_data)
+
+non_recipe_data = generate_training_data_for_non_ingredients(
+    non_ingredients, funny_answers["funnyAnswers"])
+prompt_answer_pair.append(
+    {"recipeNumber": recipe_number + 1, "training_data": non_recipe_data})
+
 
 print(f"Number of prompt-answer-pairs generated: {len(prompt_answer_pair)}")
 print(f"Number of skipped recipes: {len(skipped_recipes)}")

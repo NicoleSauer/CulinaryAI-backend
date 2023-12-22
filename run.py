@@ -1,16 +1,18 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
+import time
 
 INGREDIENT_SEPARATOR = '$'
 PROMPT_ANSWER_SEPARATOR = '%'
+ANSWER_ENDING = '&'
 
-BASE_MODEL_PATH = 'gpt2'
+BASE_MODEL_PATH = 'microsoft/phi-1_5'
 
 
 # Run the model
 if __name__ == "__main__":
 
-    ingredient_list = ['Schrauben', 'Klopapier']
+    ingredient_list = ['Kaviar', 'Senf', 'Hackfleisch']
 
     # Model input text
     input_text = ""
@@ -32,7 +34,7 @@ if __name__ == "__main__":
 
     # Use local model (if available)
     model = AutoModelForCausalLM.from_pretrained(
-        "trained_model_gpt2/checkpoint-145000", trust_remote_code=True)
+        "trained_model_microsoft_phi-1_5/checkpoint-220000", trust_remote_code=True)
 
     # Use stock model from HuggingFace
     # model = AutoModelForCausalLM.from_pretrained(
@@ -47,6 +49,9 @@ if __name__ == "__main__":
     # Encode input text into tokens
     inputs = tokenizer(input_text, return_tensors="pt").input_ids
 
+    # Set start time
+    start_time = time.time()
+
     # Generate text using model
     outputs = model.generate(
         inputs, max_new_tokens=1000, do_sample=True, top_k=50, top_p=0.95
@@ -55,10 +60,16 @@ if __name__ == "__main__":
     output = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
     # cut off at "Portionen"
-    output = output.split('Portionen')[0] + 'Portionen.'
+    # output = output.split('Portionen')[0] + 'Portionen.'
+
+    # Cut off the first part before '%'
+    output = output.split(PROMPT_ANSWER_SEPARATOR)[1]
 
     # TODO: cut off after '&' symbol for newest version of model
-    # output = output.split('&')[0]
+    output = output.split('&')[0]
 
     # Print output
     print(output)
+
+    # Print time needed for generation with 2 decimal places
+    print(f"Time needed: {time.time() - start_time:.2f} seconds")

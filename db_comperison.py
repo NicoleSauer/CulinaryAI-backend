@@ -1,6 +1,5 @@
 import pymongo
 import textwrap
-import tkinter as tk
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 

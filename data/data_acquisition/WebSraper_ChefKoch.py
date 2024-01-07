@@ -222,7 +222,7 @@ def scrape_recipe(recipes):
         
 
 def write_json(main_dataset_json):
-    with open("chefkoch_recipes.json", "w", encoding="utf-8") as f:
+    with open("chefkoch_recipes_DB_test.json", "w", encoding="utf-8") as f:
         json.dump(main_dataset_json, f, indent=4)
         f.close()
     print("JSON wurde erstellt.")

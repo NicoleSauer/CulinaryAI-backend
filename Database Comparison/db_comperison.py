@@ -13,12 +13,6 @@ menu = ("""
 
 user_recipes = []
 
-"""
-TODO:
-- Filter einfügen
-- lower einfügen
-"""
-
 while True:
 
     user_input = int(input(menu))

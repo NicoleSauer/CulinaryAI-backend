@@ -1,0 +1,97 @@
+{
+  "ingredients": [
+    { "ingredients_1": ["Gemüsebrühe", "Petersilie", "Nudeln", "Schinken"] },
+    { "ingredients_2": ["Durian", "Schmand", "Zwiebel"] },
+    {
+      "ingredients_3": [
+        "Rosmarin",
+        "Rindersteak",
+        "Gemüse",
+        "Ananas",
+        "Aubergine"
+      ]
+    },
+    { "ingredients_4": ["Banane", "Möhre", "Paprikaschote", "Tagliatelle"] },
+    {
+      "ingredients_5": [
+        "Oregano",
+        "Sandwichtoast",
+        "Olivenöl",
+        "Lauch",
+        "Gemüsebrühe"
+      ]
+    },
+    {
+      "ingredients_6": [
+        "Rinderhackfleisch",
+        "Mineralwasser",
+        "Sahne",
+        "Gewürznelke"
+      ]
+    },
+    { "ingredients_7": ["Tomaten", "Senf", "Eier"] },
+    { "ingredients_8": ["Rum", "Knoblauch", "Pinienkerne", "Datteln"] },
+    { "ingredients_9": ["Tomatenmark", "Öl", "Schlagsahne"] },
+    { "ingredients_10": ["Parmesan", "Dill", "Zwiebel", "Cherrytomate"] },
+    {
+      "ingredients_11": ["Haferflocken", "Curry", "Reis", "Erdbeeren", "Milch"]
+    },
+    { "ingredients_12": ["Kidneybohnen", "Garnelen", "Knoblauch"] },
+    { "ingredients_13": ["Sauerrahm", "Weißwein", "Muskat"] },
+    {
+      "ingredients_14": ["Drachenfrucht", "Meersalz", "Mozzarella", "Karotten"]
+    },
+    {
+      "ingredients_15": [
+        "Milchreis",
+        "Balsamico",
+        "Knollensellerie",
+        "Vollmilch",
+        "Gemüse"
+      ]
+    },
+    { "ingredients_16": ["Margarine", "Weinessig", "Kräuter", "Möhren"] },
+    { "ingredients_17": ["Frischkäse", "Mandelmus"] },
+    {
+      "ingredients_18": ["Knoblauchpulver", "Pasta", "Bockwürste", "Petersilie"]
+    },
+    {
+      "ingredients_19": [
+        "Majoran",
+        "Zucchini",
+        "Frischhefe",
+        "Zucker",
+        "Nudeln",
+        "Champignons"
+      ]
+    },
+    { "ingredients_20": ["Käse", "Spitzkohl", "Speisestärke", "Motoröl"] },
+    { "ingredients_21": ["Butter", "Zucker", "Tabasco", "Baumrinde"] },
+    {
+      "ingredients_22": [
+        "Cornichons",
+        "Kochschinken",
+        "Altmetall",
+        "Holzplatte",
+        "Fisch"
+      ]
+    },
+    {
+      "ingredients_23": [
+        "Zuckererbsen",
+        "Paniermehl",
+        "Glasflasche",
+        "Brötchen"
+      ]
+    },
+    {
+      "ingredients_24": [
+        "Butter",
+        "Cayennepfeffer",
+        "Radmuttern",
+        "Kochschinken"
+      ]
+    },
+    { "ingredients_25": ["Hammer", "Säge", "Bleichmittel"] }
+  ]
+}

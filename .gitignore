@@ -164,3 +164,15 @@ server/node_modules/
 
 # macOS
 .DS_Store
+data/data_transformation/training_data.json
+data/data_transformation/skipped_recipes.json
+
+# previous model checkpoints
+/FirstTry_2023_12_12_with_Nutrition
+/trained_model_gpt2
+/SecondTry_2023_12_13_forgot_instructions
+/ThirdTry_2023_12_14
+/wandb
+data/data_transformation/training_data copy 2.json
+data/data_transformation/training_data copy.json
+trained_model_microsoft_phi-1_5

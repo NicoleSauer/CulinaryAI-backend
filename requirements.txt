@@ -1,5 +1,7 @@
-datasets
+datasets==2.15.0
 transformers
 tqdm
 python-dotenv
 accelerate
+wandb
+einops

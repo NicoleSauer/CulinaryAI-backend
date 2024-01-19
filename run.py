@@ -6,6 +6,7 @@ INGREDIENT_SEPARATOR = '$'
 PROMPT_ANSWER_SEPARATOR = '%'
 ANSWER_ENDING = '&'
 
+
 def generate_recipe(
         base_model_name: str,
         model_or_checkpoint_name: str,
@@ -51,12 +52,11 @@ def generate_recipe(
 
     # Use local model (if available)
     model = AutoModelForCausalLM.from_pretrained(
-        model_or_checkpoint_name, trust_remote_code=True)
+        model_or_checkpoint_name, trust_remote_code=True, local_files_only=True)
 
     # use stock tokenizer from HuggingFace
     tokenizer = AutoTokenizer.from_pretrained(
-        base_model_name, trust_remote_code=True, padding=True, truncation=True
-    )
+        base_model_name, trust_remote_code=True, padding=True, truncation=True, local_files_only=True)
 
     # Encode input text into tokens
     inputs = tokenizer(input_text, return_tensors="pt").input_ids
@@ -80,11 +80,22 @@ def generate_recipe(
         # Cut off the first part before '%'
         output = output.split(PROMPT_ANSWER_SEPARATOR)[1]
 
-        # TODO: cut off after '&' symbol for newest version of model
+        # Cut off the last part after the separation character
         output = output.split('&')[0]
 
     # Print time needed for generation with 2 decimal places
-    print(f"Time needed: {time.time() - start_time:.2f} seconds")
+    time_needed = print(f"Time needed: {time.time() - start_time:.2f} seconds")
 
     # Print output
-    return output
+    return output + '\n' + time_needed
+
+
+if __name__ == "__main__":
+
+    recipe = generate_recipe(
+        base_model_name="microsoft/phi-1_5",
+        model_or_checkpoint_name="models/trained_model_microsoft_phi-1_5-2_epochs",
+        ingredient_list=["Kartoffeln", "Tomaten", "Zwiebeln"],
+    )
+
+    print(recipe)

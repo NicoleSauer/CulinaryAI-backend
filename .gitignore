@@ -176,3 +176,4 @@ data/data_transformation/skipped_recipes.json
 data/data_transformation/training_data copy 2.json
 data/data_transformation/training_data copy.json
 trained_model_microsoft_phi-1_5
+/models

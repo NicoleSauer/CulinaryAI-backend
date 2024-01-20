@@ -1,11 +1,11 @@
 import random
 import streamlit as st
 import time
-
+from run import generate_recipe
 st.title("culinaryAI")
 
 assistant_message = (
-    "Welcome to culinaryAI! I'm here to help you with finding creative new recipes. Creative, not tasteful!"
+    f"Welcome to culinaryAI! I'm here to help you with finding creative new recipes. Creative, not tasteful!"
     + "\n"
     + random.choice(
         [
@@ -18,7 +18,7 @@ assistant_message = (
     )
 )
 
-with st.chat_message("assistant"):
+with st.chat_message(name="assistant", ):
     message_placeholder = st.empty()
     full_response = ""
 
@@ -39,32 +39,51 @@ for message in st.session_state.message:
 
 # React to user input
 if prompt := st.chat_input("pasta, tomatoes, onions..."):
-    
+
     # Display user message in chat message container
     st.chat_message("user").markdown(prompt)
-    
+
     # Add user message to chat history
     st.session_state.message.append({"role": "user", "content": prompt})
-    
+
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
-        full_response =""
         assistant_response = random.choice(
             [
-                "Great choices! Let me whip up a delicious recipe for you.",
-                "Excellent selection! I'll create a tasty recipe based on your ingredients.",
-                "Fantastic! Your chosen ingredients will make a mouthwatering dish. Let me suggest a recipe.",
-                "Nice picks! I'm excited to generate a recipe using the ingredients you provided.",
-                "Perfect! Now, let me work my magic and suggest a fantastic recipe for your selected ingredients."
+                "Great choices! Let me whip up a delicious recipe for you...\n",
+                "Excellent selection! I'll create a tasty recipe based on your ingredients...\n",
+                "Fantastic! Your chosen ingredients will make a mouthwatering dish. Let me suggest a recipe...\n",
+                "Nice picks! I'm excited to generate a recipe using the ingredients you provided...\n",
+                "Perfect! Now, let me work my magic and suggest a fantastic recipe for your selected ingredients...\n"
             ]
         )
-        for chunk in assistant_response.split():
-            full_response += chunk + " "
+
+        response_1 = ""
+        for chunk in assistant_response.split(' '):
+            response_1 += chunk + " "
             time.sleep(0.05)
-            #Cursor added
-            message_placeholder.markdown(full_response + "▌")
-        message_placeholder.markdown(full_response)
-    
-    # Add assistant response to chat history
-    st.session_state.message.append({"role": "assistant", "content": full_response})
+            # Cursor added
+            message_placeholder.markdown(response_1 + "▌")
+
+        message_placeholder.markdown(response_1)
+
+        # Add response to chat history
+        st.session_state.message.append(
+            {"role": "assistant", "content": response_1})
+
+        model_response = generate_recipe(
+            'openai-community/gpt2-large', 'openai-community/gpt2-large', prompt.split(', '), 'Please give me a recipe wit the following ingredients:')
+
+        response_2 = ""
+        for chunk in model_response.split(' '):
+            response_2 += chunk + " "
+            time.sleep(0.05)
+            # Cursor added
+            message_placeholder.markdown(response_2 + "▌")
+
+        message_placeholder.markdown(response_2)
+
+        # Add response to chat history
+        st.session_state.message.append(
+            {"role": "assistant", "content": response_2})

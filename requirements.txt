@@ -5,3 +5,5 @@ python-dotenv
 accelerate
 wandb
 einops
+streamlit
+pymongo

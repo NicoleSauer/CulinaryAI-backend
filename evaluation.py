@@ -123,7 +123,7 @@ def create_output_object(ingredients_key: str, ingredients_list: list, output: s
 
 
 evaluate_model_with_ingredients(
-    'openai-community/gpt2-large',
-    'GPT-large-4-epochs',
-    'gpt2_large_4_epochs',
-    Language.EN)
+    'openai-community/gpt2-medium',
+    'gpt2_medium_4_epochs_no_recognition',
+    'gpt2_medium_4_epochs_without_recognition',
+    Language.DE)

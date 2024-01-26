@@ -5,30 +5,9 @@ import time
 from run import generate_recipe, initialize_model
 
 
-def get_base64(bin_file):
-    with open(bin_file, 'rb') as f:
-        data = f.read()
-    return base64.b64encode(data).decode()
-
-
-def set_background(png_file):
-    bin_str = get_base64(png_file)
-    page_bg_img = '''
-        <style>
-        .stApp {
-        background-image: url("data:image/png;base64,%s");
-        background-size: cover;
-        }
-        </style>
-        ''' % bin_str
-    st.markdown(page_bg_img, unsafe_allow_html=True)
-
-
-# set_background('images/ai_chef_blurry_white.png')
-
 # Load and initialize model
 model, tokenizer = initialize_model(
-    model_name='openai-community/gpt2-large',
+    model_name='models/gpt2-large_2_epochs',
     tokenizer_model='openai-community/gpt2-large',
 )
 
@@ -148,7 +127,6 @@ else:
             model,
             tokenizer,
             user_input_list,
-            'Please give me a recipe with the following ingredients:'
         )
 
         # Add assistant response to chat history

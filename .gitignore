@@ -180,3 +180,4 @@ trained_model_microsoft_phi-1_5
 *model.safetensors
 *generation_config.json
 *config.json
+/models

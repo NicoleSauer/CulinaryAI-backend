@@ -1,6 +1,5 @@
 import random
 import streamlit as st
-import base64
 import time
 from run import generate_recipe, initialize_model
 
@@ -66,7 +65,7 @@ if "messages" not in st.session_state:
 else:
     # Display chat messages from history on app rerun
     for message in st.session_state.messages:
-        with st.chat_message(name=message["role"], avatar='images/icons/ai_chef4.png' if message["role"] == "assistant" else 'images/icons/user.png'):
+        with st.chat_message(name=message["role"], avatar='images/icons/ai_chef4.png' if message["role"] == "assistant" else 'user'):
             st.markdown(message["content"])
 
     if st.session_state.user_input:

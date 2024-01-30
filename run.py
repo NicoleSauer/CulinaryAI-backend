@@ -17,11 +17,12 @@ def initialize_model(model_name: str, tokenizer_model: str):
     :return: The model and tokenizer
     """
 
+    # Do not use this on macOS as this causes a segmentation fault with streamlit due to concurrency issues
     # Use GPU if available
-    if torch.cuda.is_available():
-        torch.set_default_device("cuda")
-    else:
-        torch.set_default_device("cpu")
+    # if torch.cuda.is_available():
+    #    torch.set_default_device("cuda")
+    # else:
+    #    torch.set_default_device("cpu")
 
     # Use local model (if available)
     model = AutoModelForCausalLM.from_pretrained(

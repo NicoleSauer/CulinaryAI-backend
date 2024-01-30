@@ -5,19 +5,19 @@ from transformers import AutoModelForCausalLM
 if __name__ == "__main__":
 
     # Model input text
-    input_text = "Paprika$Nudeln"
+    input_text = "Nudeln$Tomaten$Zwiebeln"
 
     # Use local model (if available)
     # model = AutoModelForCausalLM.from_pretrained("./phi-1_5", trust_remote_code=True)
 
     # Use stock model from HuggingFace
     model = AutoModelForCausalLM.from_pretrained(
-        "models/Phi-1_5_1_epoch/", trust_remote_code=True, revision='24f9ea14df973a49a0d87c16d04df88d90067468', local_files_only=False
+        "models/gpt2-large_2_epochs", trust_remote_code=True, local_files_only=False
     )
 
     # use stock tokenizer from HuggingFace
     tokenizer = AutoTokenizer.from_pretrained(
-        "microsoft/phi-1_5", trust_remote_code=True, revision='24f9ea14df973a49a0d87c16d04df88d90067468', local_files_only=False
+        "openai-community/gpt2-large", trust_remote_code=True, local_files_only=False, truncation=True, padding=True
     )
 
     # Encode input text into tokens

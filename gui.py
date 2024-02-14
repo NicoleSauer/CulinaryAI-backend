@@ -138,10 +138,9 @@ else:
 
     # Choose random welcome back message
     welcome_back_message = random.choice([
-        "Ich hoffe, das war lecker! Was möchtest du als nächstes kochen?",
-        "Ich hoffe, das hat geschmeckt! Was möchtest du als nächstes kochen?",
-        "Ich hoffe, das war gut! Was möchtest du als nächstes kochen?",
-        "Ich hoffe, das hat dir geschmeckt! Was möchtest du als nächstes kochen?",
+        "Lass es dir schmecken! Ich bin bereit für die nächste Runde. Welche Zutaten möchtest du verwenden?",
+        "Lass uns ein weiteres Rezept generieren! Welche Zutaten möchtest du verwenden?",
+        "Und, wie klingt das?"
     ])
 
     time.sleep(0.3)

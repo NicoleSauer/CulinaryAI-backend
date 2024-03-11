@@ -10,7 +10,7 @@ main_dataset_json = []
 
 
 def scrape_all_links(recipes):
-    for i in range(24): # 24
+    for i in range(24): # 24 == Anzahl der Seiten
         page = urlopen(f"https://www.chefkoch.de/rs/s{i}t211/Studentenkueche-Rezepte.html").read()
 
         soup = BeautifulSoup(page, "html.parser")
